@@ -4,24 +4,24 @@ import csv
 budget_csv = os.path.join(".", "budget_data.csv")
 
 
-# Read the csv and convert it into a list of dictionaries
+# Read and separate csv file
 with open(budget_csv, 'r') as csv_file:
     csvreader = csv.reader(csv_file, delimiter=",")
 
-    # use next to skip first title row in csv file
+    # use next to skip csv file header row
     next(csvreader) 
+    #defining variables
     revenue = []
     date = []
-    rev_change = []
+    rev_chg = []
 
-    # in this loop I did sum of column 1 which is revenue in csv file and counted total months which is column 0 
+    # this loop sums revenue in csv file and counts total months
     for row in csvreader:
 
         revenue.append(float(row[1]))
         date.append(row[0])
 
-    print("Financial Analysis")
-    print("-----------------------------------")
+
     print("Total Months:", len(date))
     print("Total Revenue: $", sum(revenue))
 
@@ -39,6 +39,6 @@ with open(budget_csv, 'r') as csv_file:
         min_rev_chg_date = str(date[rev_chg.index(min(rev_chg))])
 
 
-    print("Avereage Revenue Change: $", round(avg_rev_chg))
-    print("Greatest Increase in Revenue:", max_rev_chg_date,"($", max_rev_chg,")")
-    print("Greatest Decrease in Revenue:", min_rev_chg_date,"($", min_rev_chg,")")
+    print("Avg Revenue Chg: $", round(avg_rev_chg))
+    print("Greatest Inc. in Revenue:", max_rev_chg_date,"($", max_rev_chg,")")
+    print("Greatest Dec. in Revenue:", min_rev_chg_date,"($", min_rev_chg,")")
