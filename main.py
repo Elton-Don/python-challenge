@@ -1,44 +1,76 @@
 import os
 import csv
 
-budget_csv = os.path.join(".", "budget_data.csv")
+budget_csv = os.path.join(".", "election_data.csv")
 
+votes =[]
+Candidate = []
+vote_pcnt = []
+vote_cnt = 0
+vote_cnti = 0
+Winner =[]
+winvote = 0
+prow = []
 
-# Read and separate csv file
-with open(budget_csv, 'r') as csv_file:
+# Read the csv and convert it into a list of dictionaries
+with open(budget_csv, 'r') as csv_file:     # opening and reading the file
     csvreader = csv.reader(csv_file, delimiter=",")
-
-    # use next to skip csv file header row
-    next(csvreader) 
-    #defining variables
-    revenue = []
-    date = []
-    rev_chg = []
-
-    # this loop sums revenue in csv file and counts total months
+    next(csvreader)      #skipping the header
     for row in csvreader:
+      vote_cnt = vote_cnt + 1
+      if row[2] not in Candidate:
+        Candidate.append(row[2])
+  
 
-        revenue.append(float(row[1]))
-        date.append(row[0])
+for x in range(0,len(Candidate)):
+  with open(budget_csv, 'r') as csv_file:
+    csvreader = csv.reader(csv_file, delimiter=",")
+    next(csvreader) 
+    vote_cnti = 0       
+    for row in csvreader:
+      if row[2] == Candidate[x]:
+        vote_cnti = vote_cnti + 1
+  votes.append(vote_cnti)
+  vote_pcnt.append(vote_cnti/vote_cnt)
+
+winvote = 0
+for x in range(0,len(Candidate)):
+  if (int(votes[x])) > winvote:
+    winvote = int(votes[x])
+    Winner = Candidate[x]
 
 
-    print("Total Months:", len(date))
-    print("Total Revenue: $", sum(revenue))
+prows1 =[
+    ["Election Results"], 
+    ["------------------------"],    
+    ["Total Votes:", (vote_cnt)],
+    ["------------------------"],  
+]
+
+prows3 =[   
+    ["------------------------"],    
+    ["Winner:", Winner],
+    ["------------------------"]     
+]
+
+for x in range(0,len(Candidate)):
+  prow =[f"{Candidate[x]}, {vote_pcnt[x] :.3%}, {votes[x]}"]
+  print(prow)
 
 
-    #in this loop I did total of difference between all row of column "Revenue" and found total revnue change. Also found out max revenue change and min revenue change. 
-    for i in range(1,len(revenue)):
-        rev_chg.append(revenue[i] - revenue[i-1])   
-        avg_rev_chg = sum(rev_chg)/len(rev_chg)
-
-        max_rev_chg = max(rev_chg)
-
-        min_rev_chg = min(rev_chg)
-
-        max_rev_chg_date = str(date[rev_chg.index(max(rev_chg))])
-        min_rev_chg_date = str(date[rev_chg.index(min(rev_chg))])
+for row in prows1:  
+    print(row)  
+for row in prows3:
+    print(row)    
+for x in range(0,len(Candidate)):
+    print((f"{Candidate[x]}, {vote_pcnt[x] :.3%}, {votes[x]}"))
 
 
-    print("Avg Revenue Chg: $", round(avg_rev_chg))
-    print("Greatest Inc. in Revenue:", max_rev_chg_date,"($", max_rev_chg,")")
-    print("Greatest Dec. in Revenue:", min_rev_chg_date,"($", min_rev_chg,")")
+with open('election_results.csv', 'wt') as w:
+  csv_writer = csv.writer(w)
+  for row in prows1:
+    csv_writer.writerow(row)
+#  for x in range(0,len(Candidate)):  
+#    csv_writer.writerow((prow[x]) )
+  for row in prows3:
+    csv_writer.writerow(row)
