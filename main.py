@@ -53,9 +53,9 @@ prows3 =[
     ["------------------------"]     
 ]
 
-for x in range(0,len(Candidate)):
-  prow =[f"{Candidate[x]}, {vote_pcnt[x] :.3%}, {votes[x]}"]
-  print(prow)
+#for x in range(0,len(Candidate)):
+#  prow =[f"{Candidate[x]}, {vote_pcnt[x] :.3%}, {votes[x]}"]
+#  print(prow)
 
 
 for row in prows1:  
@@ -70,7 +70,8 @@ with open('election_results.csv', 'wt') as w:
   csv_writer = csv.writer(w)
   for row in prows1:
     csv_writer.writerow(row)
-#  for x in range(0,len(Candidate)):  
-#    csv_writer.writerow((prow[x]) )
+  for x in range(0,len(Candidate)):
+    prow =[f"{Candidate[x]}, {vote_pcnt[x] :.3%}, {votes[x]}"]
+    csv_writer.writerow(prow)
   for row in prows3:
     csv_writer.writerow(row)
